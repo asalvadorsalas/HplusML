@@ -1,4 +1,4 @@
-"""Base module for the default configuration of all employed ML algorithms"""
+"""Base module for the default configuration of all employed machine learning algorithms"""
 
 from sklearn.ensemble import AdaBoostClassifier, GradientBoostingClassifier,GradientBoostingRegressor,AdaBoostRegressor
 from sklearn.tree import DecisionTreeClassifier,DecisionTreeRegressor
