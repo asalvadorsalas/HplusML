@@ -18,6 +18,64 @@ def getXy():
     print X,y
     return X,y
 
+def summarizeFitData(X, y, w=None, categories=None, showavevar=True):
+    """ prints a summary of the X=features, y=classes, w=weights data on the command line"""
+    
+    print "X.shape=", X.shape, "y.shape=", y.shape,
+    if w is None:
+        w=pd.Series(np.ones(y.shape))
+    else:
+        print "w.shape=", w.shape,
+
+    print
+    print "columns=", X.columns
+    
+    if categories is None:
+        categories=y
+
+    uniquecategories=sorted(categories.unique())
+    print "categories=",uniquecategories
+    print 
+    
+    print "sum of weights per category"
+    length=max([len(str(x)) for x in uniquecategories]+[10])
+    print ('{:>'+str(length)+'}').format("all"),('{:>'+str(length)+'}').format(w.sum())
+    for cat in uniquecategories:
+        print ('{:>'+str(length)+'}').format(cat), ('{:>'+str(length)+'}').format(w[categories==cat].sum())
+    print "\n"
+
+    if showavevar:
+        print "average"
+        variablelength=max([len(x) for x in X.columns]+[len("variable/class")])
+        print ('{:>'+str(variablelength)+'}').format("variable/class"),
+        print ('{:>'+str(length)+'}').format("all"),
+        for cat in uniquecategories:
+            print ('{:>'+str(length)+'}').format(cat),
+        print
+    
+        for i,variable in enumerate(X.columns):
+            print ('{:>'+str(variablelength)+'}').format(variable),
+            print ('{:>'+str(length)+'.3}').format(np.average(X[variable], weights=w)),
+            for cat in uniquecategories:
+                print ('{:>'+str(length)+'.3}').format(np.average(X[variable][categories==cat], weights=w[categories==cat])),
+            print
+        print "\n"
+        
+        print "variance"
+        print ('{:>'+str(variablelength)+'}').format("variable/class"),
+        print ('{:>'+str(length)+'}').format("all"),
+        for cat in uniquecategories:
+            print ('{:>'+str(length)+'}').format(cat),
+        print
+    
+        for i,variable in enumerate(X.columns):
+            print ('{:>'+str(variablelength)+'}').format(variable),
+            print ('{:>'+str(length)+'.3}').format(variance(X[variable], weights=w)),
+            for cat in uniquecategories:
+                print ('{:>'+str(length)+'.3}').format(variance(X[variable][categories==cat], weights=w[categories==cat])),
+            print
+        print "\n"
+    
 def variance(values, weights=None, axis=0):
     """ returns weighted (biased) variance
         values: array/series with values
