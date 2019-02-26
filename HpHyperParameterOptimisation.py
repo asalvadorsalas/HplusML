@@ -26,7 +26,8 @@ class HpOptimise():
         self.X_test=X_test
         self.y_test=y_test
         self.w_test=w_test
-
+        self.default_options=self.method.get_params()
+        
     def test(self, X_train, y_train, w_train, X_test, y_test, w_test, stagedresults=False):
         """ returns (staged) ROC AUC value for testing and training dataset
             X_{train,test): feature matrix for training/testing data
@@ -75,7 +76,9 @@ class HpOptimise():
         self.method.fit(self.X_train, self.y_train, sample_weight = self.w_train)
         if not silent:
             print "training done"
-        return self.test(stagedresults=stagedresults, X_train=self.X_train, y_train=self.y_train, w_train=self.w_train, X_test=self.X_test, y_test=self.y_test, w_test=self.w_test)
+        ret=self.test(stagedresults=stagedresults, X_train=self.X_train, y_train=self.y_train, w_train=self.w_train, X_test=self.X_test, y_test=self.y_test, w_test=self.w_test)
+        self.method.set_params(**self.default_options)
+        return ret
 
     def getDefaultParams(self):
         """ return default parameters for different ML algorithms"""
@@ -296,16 +299,19 @@ class HpOptimise():
 
         if values==None:
             values=self.getParamGrid()[variable]
-        
+
+        if variable=="n_estimators":#special case as can be covered by stagedresults
+            values=[self.default_options["n_estimators"]]
+            
         train_scores={}
         test_scores={}
-        saved_options=self.method.get_params()
 
         #from joblib import Parallel, delayed
         #import multiprocessing
         #num_cores = multiprocessing.cpu_count()
         def get_scores(value):
-            options=saved_options
+            options=self.default_options
+            
             options[variable]=value
             print "Training for ", value
             if writetotxt:
@@ -327,7 +333,10 @@ class HpOptimise():
            showtrain: bool, if true training scores will be shown on the plot
            txtfilename: optional text frile from which the results are read (default: None=not used)
         """
-                          
+
+        if variable=="n_estimators":#special case as can be covered by stagedresults
+            values=[self.default_options["n_estimators"]]
+        
         ntrees={}
         if txtfilename is not None:
             if txtfilename=="":
@@ -389,7 +398,7 @@ class HpOptimise():
            values: list of values for the hyperparameter
            filename: None or string, filename under which the plot will be saved (default: None, auto-generated file name)
         """
-                        
+
         if values==None:
             values=self.getParamGrid()[variable]
         
