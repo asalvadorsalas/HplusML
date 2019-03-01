@@ -1,6 +1,7 @@
 """Module with class that provides the H+ data for machine learning functions"""
 import numpy as np
 import HpMLUtils
+from sklearn.model_selection import train_test_split
 
 class HpTrainingFrame:
     """Class that provides the H+ data for machine learning functions"""
@@ -67,10 +68,11 @@ class HpTrainingFrame:
         mask=self.get_pandasframe_mask(region, hpmass, invertsignal=invertsignal)
         return self.pandasframe[mask].eventNumber.apply(lambda x: 0 if x%100 in digits_train else 1 if x%100 in digits_test else 2)
 
-    def prepare(self, region="INC_ge6jge4b", hpmass="multi", shuffle=True, addMass=False, invertsignal=False, regression=False):
+    def prepare(self, region="INC_ge6jge4b", hpmass="multi", random=False, shuffle=True, addMass=False, invertsignal=False, regression=False):
         """ returns feature matrices, class labels and weights for training, testing and evaluation datasets (X_train, y_train, w_train, X_test, y_test, w_test, X_eval, y_eval, w_eval)
             region: string, region of the events to be returned
             hpmass: string "multi" or integer specifying the H+ mass
+            random: do not use event number for putting into training, test and evaluation dataset, but a random number (50%:50%) split
             shuffle: bool, if true events will be shuffled
             addMass: bool if True the truth H+ mass is added to the feature matrix (for parameterized ML training)
             invertsignal: if true all signal points except for hpmass are selected
@@ -78,5 +80,11 @@ class HpTrainingFrame:
         """
 
         features, classes, weights=self.get_features_classes_weights(region,hpmass, addMass=addMass, invertsignal=invertsignal)
-        split_series=self.get_split_series(region, hpmass, invertsignal=invertsignal)
+        if random:
+            #mask=self.get_pandasframe_mask(region, hpmass, invertsignal=invertsignal)
+            #print mask.shape, features.shape, classes.shape, weights.shape, mask.sum()
+            X_train, X_test,  y_train, y_test, w_train, w_test = train_test_split(features, classes, weights, test_size=0.5,shuffle=True, random_state=None)
+            return X_train, X_test, None, y_train, y_test, None, w_train, w_test, None #evaluation split is empty
+        else:
+            split_series=self.get_split_series(region, hpmass, invertsignal=invertsignal)
         return HpMLUtils.train_test_split3(features,classes,weights, shuffle=shuffle, test_fold=split_series)
