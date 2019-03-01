@@ -180,12 +180,12 @@ class HpOptimise():
            fit: bool if True, method will be fit to training data before evaluation
         """
         
-        title=self.name+" "+str(self.method.get_params())
+        #title=self.name+" "+str(self.method.get_params())
         if fit:
             print "starting training"
             self.method.fit(self.X_train, self.y_train, sample_weight = self.w_train)
             print "training done"
-        self.drawROCCurve(title=title)
+        self.drawROCCurve()
         if filename is None:
             filename="roccurve_"+type(self.method).__name__+"_"+self.name
             for key in sorted(self.method.get_params().keys()):
