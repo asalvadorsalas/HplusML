@@ -384,7 +384,7 @@ class MultiSWeightsScaler():
         for classlabel in classes:
             sumweight=sample_weight[y==classlabel].sum()
             self.scale_[classlabel]=differences[classlabel]/(sumweight*diffsum)
-         return
+        return
         
     def transform(self, X, y, sample_weight, copy=None):
         """Transforms the sum of weights for all classes so that sum of weights for the signal is flattened as a function of the class variable (and the integral is 1.0)
