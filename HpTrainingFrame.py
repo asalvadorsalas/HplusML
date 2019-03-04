@@ -79,7 +79,7 @@ class HpTrainingFrame:
             regression: bool, if false y will be 0=background or 1=signal, if true it will be the hp mass or 0 for background
         """
 
-        features, classes, weights=self.get_features_classes_weights(region,hpmass, addMass=addMass, invertsignal=invertsignal)
+        features, classes, weights=self.get_features_classes_weights(region,hpmass, addMass=addMass, invertsignal=invertsignal, regression=regression)
         if random:
             #mask=self.get_pandasframe_mask(region, hpmass, invertsignal=invertsignal)
             #print mask.shape, features.shape, classes.shape, weights.shape, mask.sum()
