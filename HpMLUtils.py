@@ -18,7 +18,7 @@ def getXy():
     print X,y
     return X,y
 
-def summarizeFitData(X, y, w=None, categories=None, showavevar=True):
+def summarizeFitData(X, y, w=None, categories=None, showavevarminmax=True):
     """ prints a summary of the X=features, y=classes, w=weights data on the command line"""
     
     print "X.shape=", X.shape, "y.shape=", y.shape,
@@ -44,7 +44,7 @@ def summarizeFitData(X, y, w=None, categories=None, showavevar=True):
         print ('{:>'+str(length)+'}').format(cat), ('{:>'+str(length)+'}').format(w[categories==cat].sum())
     print "\n"
 
-    if showavevar:
+    if showavevarminmax:
         print "average"
         variablelength=max([len(x) for x in X.columns]+[len("variable/class")])
         print ('{:>'+str(variablelength)+'}').format("variable/class"),
@@ -73,6 +73,25 @@ def summarizeFitData(X, y, w=None, categories=None, showavevar=True):
             print ('{:>'+str(length)+'.3}').format(variance(X[variable], weights=w)),
             for cat in uniquecategories:
                 print ('{:>'+str(length)+'.3}').format(variance(X[variable][categories==cat], weights=w[categories==cat])),
+            print
+        print "\n"
+
+        print "min/max"
+        print ('{:>'+str(variablelength)+'}').format("variable/class"),
+        print ('{:>'+str(length)+'}').format("all/min"),
+        print ('{:>'+str(length)+'}').format("all/max"),
+        for cat in uniquecategories:
+            print ('{:>'+str(length)+'}').format(str(cat)+"/min"),
+            print ('{:>'+str(length)+'}').format(str(cat)+"/max"),
+        print
+    
+        for i,variable in enumerate(X.columns):
+            print ('{:>'+str(variablelength)+'}').format(variable),
+            print ('{:>'+str(length)+'.3}').format(float(np.min(X[variable]))),
+            print ('{:>'+str(length)+'.3}').format(float(np.max(X[variable]))),
+            for cat in uniquecategories:
+                print ('{:>'+str(length)+'.3}').format(float(np.min(X[variable][categories==cat]))),
+                print ('{:>'+str(length)+'.3}').format(float(np.max(X[variable][categories==cat]))),
             print
         print "\n"
     
@@ -264,6 +283,38 @@ def train_test_split3(*arrays, **options):
     return list(chain.from_iterable((safe_indexing(a, train),
                                      safe_indexing(a, test),
                                      safe_indexing(a, evalu)) for a in arrays))
+
+class WeightedStandardScalerForHp(WeightedStandardScaler):
+    """ Same as WeightedStandardScaler however having a special transformation for njets and nbjets (as those are integer variables we just divide by 10)"""
+
+    def fit(self, X, y=None, sample_weight=None):
+        """Compute the mean and std to be used for later scaling.
+        Parameters
+        ----------
+        X : {array-like, sparse matrix}, shape [n_samples, n_features]
+            The data used to compute the mean and standard deviation
+            used for later scaling along the features axis.
+        y
+            Ignored
+        """
+
+        # Reset internal state before fitting
+        self._reset()
+
+        if self.with_mean:
+            self.mean_ = np.average(X,axis=0,weights=sample_weight)
+        if self.with_std:
+            self.var_ = variance(X,weights=sample_weight)
+            #np.average((X-self.mean_)*(X-self.mean_),axis=0, weights=sample_weight)
+            self.scale_ = np.sqrt(self.var_)
+
+        for i,col in enumerate(X.columns):
+            if col=="nJets" or "nBTags" in col:
+                self.mean_[i]=0
+                self.var_[i]=100
+                self.scale_[i]=10
+
+        return self
 
 class WeightedStandardScaler(BaseEstimator, TransformerMixin):
     """Class which transforms all features to have average 0 and variance 1, same as scikit-learn StandardScaler, but taking weights into account """
