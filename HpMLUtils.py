@@ -284,37 +284,6 @@ def train_test_split3(*arrays, **options):
                                      safe_indexing(a, test),
                                      safe_indexing(a, evalu)) for a in arrays))
 
-class WeightedStandardScalerForHp(WeightedStandardScaler):
-    """ Same as WeightedStandardScaler however having a special transformation for njets and nbjets (as those are integer variables we just divide by 10)"""
-
-    def fit(self, X, y=None, sample_weight=None):
-        """Compute the mean and std to be used for later scaling.
-        Parameters
-        ----------
-        X : {array-like, sparse matrix}, shape [n_samples, n_features]
-            The data used to compute the mean and standard deviation
-            used for later scaling along the features axis.
-        y
-            Ignored
-        """
-
-        # Reset internal state before fitting
-        self._reset()
-
-        if self.with_mean:
-            self.mean_ = np.average(X,axis=0,weights=sample_weight)
-        if self.with_std:
-            self.var_ = variance(X,weights=sample_weight)
-            #np.average((X-self.mean_)*(X-self.mean_),axis=0, weights=sample_weight)
-            self.scale_ = np.sqrt(self.var_)
-
-        for i,col in enumerate(X.columns):
-            if col=="nJets" or "nBTags" in col:
-                self.mean_[i]=0
-                self.var_[i]=100
-                self.scale_[i]=10
-
-        return self
 
 class WeightedStandardScaler(BaseEstimator, TransformerMixin):
     """Class which transforms all features to have average 0 and variance 1, same as scikit-learn StandardScaler, but taking weights into account """
@@ -403,6 +372,39 @@ class WeightedStandardScaler(BaseEstimator, TransformerMixin):
         if self.with_std:
             X *= self.scale_
         return X
+
+class WeightedStandardScalerForHp(WeightedStandardScaler):
+    """ Same as WeightedStandardScaler however having a special transformation for njets and nbjets (as those are integer variables we just divide by 10)"""
+
+    def fit(self, X, y=None, sample_weight=None):
+        """Compute the mean and std to be used for later scaling.
+        Parameters
+        ----------
+        X : {array-like, sparse matrix}, shape [n_samples, n_features]
+            The data used to compute the mean and standard deviation
+            used for later scaling along the features axis.
+        y
+            Ignored
+        """
+
+        # Reset internal state before fitting
+        self._reset()
+
+        if self.with_mean:
+            self.mean_ = np.average(X,axis=0,weights=sample_weight)
+        if self.with_std:
+            self.var_ = variance(X,weights=sample_weight)
+            #np.average((X-self.mean_)*(X-self.mean_),axis=0, weights=sample_weight)
+            self.scale_ = np.sqrt(self.var_)
+
+        for i,col in enumerate(X.columns):
+            if col=="nJets" or "nBTags" in col:
+                self.mean_[i]=0
+                self.var_[i]=100
+                self.scale_[i]=10
+
+        return self
+
 
 class MultiSWeightsScaler():
     """ Class that scales makes the integral of the signal weights be 1., for several signal categories the distribution as a function of the class variable is flattened. Background is not considered."""
