@@ -1,4 +1,5 @@
 """Module to simplify H+ data import """
+from __future__ import print_function
 from IPython.core.debugger import set_trace
 import pandas as pd
 from root_pandas import read_root
@@ -21,13 +22,13 @@ class HpAnalysis:
         """Constructor which sets the release (20 or 21) and b-tagging working point"""
 
         if release!=20 and release!=21:
-            print "ERROR: Unknown release ", release, " using R21 now."
+            print("ERROR: Unknown release ", release, " using R21 now.")
             self.release=21
         else:
             self.release=release
 
         if btagWP!=60 and btagWP!=70 and btagWP!=77 and btagWP!=80:
-            print "ERROR: Unknown btagging WP ", btagWP, " using 70% now."
+            print("ERROR: Unknown btagging WP ", btagWP, " using 70% now.")
             self.btagWP=77
         else:
             self.btagWP=btagWP
@@ -49,15 +50,15 @@ class HpAnalysis:
 
     def getGeneralSettings(self):
         if not "Job" in self.fitconfig:
-            print "ERROR: Did not find Job in fit configuration"
+            print("ERROR: Did not find Job in fit configuration")
         if not "NtuplePaths" in self.fitconfig["Job"]:
-            print "ERROR: Did not find NtuplePaths in fit configuration -> Job"
+            print("ERROR: Did not find NtuplePaths in fit configuration -> Job")
         self.inputpath=self.fitconfig["Job"]["NtuplePaths"]
         if not "NtupleName" in self.fitconfig["Job"]:
-            print "ERROR: Did not find NtupleName in fit configuration -> Job"
+            print("ERROR: Did not find NtupleName in fit configuration -> Job")
         self.treename=self.fitconfig["Job"]["NtupleName"]
         if not "MCweight" in self.fitconfig["Job"]:
-            print "ERROR: Did not find MCweight in fit configuration -> Job"
+            print("ERROR: Did not find MCweight in fit configuration -> Job")
         self.mcweight=self.fitconfig["Job"]["MCweight"]
         self.lumiscale=1.
 
@@ -73,7 +74,7 @@ class HpAnalysis:
                     self.df_data=None
                 for region in self.fitconfig["Region"]:
                     if len(regions)==0 or region["Name"] in regions:
-                        print "Reading",sample['Name'],"in region", region["Name"]
+                        print("Reading",sample['Name'],"in region", region["Name"])
                         selection=region["Selection"]
                         if "Selection" in sample:
                             selection="("+selection+") && ("+sample["Selection"]+")"
@@ -90,7 +91,7 @@ class HpAnalysis:
                                         if "LumiScale" in sample:
                                             self.lumiscale=sample["LumiScale"]
                                         else:
-                                            print "ERROR: Did not find LumiScale for sample ", sample["Name"], " even though it is normalized by theory"
+                                            print("ERROR: Did not find LumiScale for sample ", sample["Name"], " even though it is normalized by theory")
                                             self.lumiscale=1.
                                     else:
                                         mcweight=sample["MCweight"]
@@ -100,7 +101,7 @@ class HpAnalysis:
                                     if "LumiScale" in sample:
                                         self.lumiscale=sample["LumiScale"]
                                     else:
-                                        print "ERROR: Did not find LumiScale for sample ", sample["Name"], " even though it is normalized by theory"
+                                        print("ERROR: Did not find LumiScale for sample ", sample["Name"], " even though it is normalized by theory")
                                         self.lumiscale=1.
 
                         #get the list of input files
@@ -129,7 +130,7 @@ class HpAnalysis:
                         if sample['Name']!='data':
                             columns=columns+["noexpand:"+mcweight]                            
                         
-                        print "Reading:", datafiles, self.treename, columns, selection
+                        print("Reading:", datafiles, self.treename, columns, selection)
                         tmpdf = read_root(datafiles,self.treename,columns=columns,where=selection)
                         tmpdf.rename(columns={mcweight: 'weight'}, inplace=True) #remove the ugly name of the mcweight column
                         if "weight" in tmpdf.columns: #special case for mc
@@ -155,7 +156,7 @@ class HpAnalysis:
                             else:
                                 self.df_mc=pd.concat([self.df_mc,tmpdf],axis=0)
                                 
-        print "adding jet_pt1 column"
+        print("adding jet_pt1 column")
         if self.df_data is not None:
             self.df_data.loc[:, 'pT_jet1'] = self.df_data.jet_pt.map(lambda x: x[0])
             self.df_data.reset_index(inplace = True) 
