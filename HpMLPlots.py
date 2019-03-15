@@ -1,5 +1,6 @@
 """Module with implementation of functions for plotting properties of input datasets and ML algorithms"""
 
+from __future__ import print_function
 import pandas as pd
 import numpy as np
 import HpMLUtils
@@ -69,7 +70,7 @@ def plotAverageVarianceAsFunctionOfMass(htf, variables=["Muu_MindR_70","nJets","
                     divisor=1000.
                 ave=np.average(df[variable]/divisor,weights=df.weight)
                 sqrtvar=HpMLUtils.sqrtvariance(df[variable]/divisor,weights=df.weight)
-                print variable, hpmass, process, ave, sqrtvar, wsum
+                print(variable, hpmass, process, ave, sqrtvar, wsum)
                 if process==0:
                     averagebackground[variable].append(ave)
                     sqrtvarupbackground[variable].append(ave+sqrtvar)
@@ -125,8 +126,8 @@ def plotScoreHistogram(htf, method, hpmass="multi"):
     """
     
     X_train, X_test, X_eval, y_train, y_test,y_eval, w_train, w_test, w_eval=htf.prepare(hpmass=hpmass)
-    print "starting fit"
+    print("starting fit")
     method.fit(X_train, y_train, sample_weight=w_train)
-    print "done with fit"
+    print("done with fit")
     y_pred=method.predict(X_test)
     plotHistogram(y_test,y_pred,w_test)

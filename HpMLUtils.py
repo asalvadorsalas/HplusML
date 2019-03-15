@@ -1,5 +1,6 @@
 """Module with several helper functions for H+ machine learning algorithms"""
 
+from __future__ import print_function
 import numpy as np
 from itertools import chain
 from sklearn.utils import safe_indexing, check_random_state,check_array
@@ -15,85 +16,85 @@ def getXy():
     for i in range(0,10):
         for j in range(0,10):
             X[i,j]=i*10+j
-    print X,y
+    print(X,y)
     return X,y
 
 def summarizeFitData(X, y, w=None, categories=None, showavevarminmax=True):
     """ prints a summary of the X=features, y=classes, w=weights data on the command line"""
     
-    print "X.shape=", X.shape, "y.shape=", y.shape,
+    print("X.shape=", X.shape, "y.shape=", y.shape,)
     if w is None:
         w=pd.Series(np.ones(y.shape))
     else:
-        print "w.shape=", w.shape,
+        print("w.shape=", w.shape,)
 
-    print
-    print "columns=", X.columns
+    print()
+    print("columns=", X.columns)
     
     if categories is None:
         categories=y
 
     uniquecategories=sorted(categories.unique())
-    print "categories=",uniquecategories
-    print 
+    print("categories=",uniquecategories)
+    print()
     
-    print "sum of weights per category"
+    print("sum of weights per category")
     length=max([len(str(x)) for x in uniquecategories]+[10])
-    print ('{:>'+str(length)+'}').format("all"),('{:>'+str(length)+'}').format(w.sum())
+    print(('{:>'+str(length)+'}').format("all"),('{:>'+str(length)+'}').format(w.sum()))
     for cat in uniquecategories:
-        print ('{:>'+str(length)+'}').format(cat), ('{:>'+str(length)+'}').format(w[categories==cat].sum())
-    print "\n"
+        print(('{:>'+str(length)+'}').format(cat), ('{:>'+str(length)+'}').format(w[categories==cat].sum()))
+    print("\n")
 
     if showavevarminmax:
-        print "average"
+        print("average")
         variablelength=max([len(x) for x in X.columns]+[len("variable/class")])
-        print ('{:>'+str(variablelength)+'}').format("variable/class"),
-        print ('{:>'+str(length)+'}').format("all"),
+        print(('{:>'+str(variablelength)+'}').format("variable/class"),)
+        print(('{:>'+str(length)+'}').format("all"),)
         for cat in uniquecategories:
-            print ('{:>'+str(length)+'}').format(cat),
+            print(('{:>'+str(length)+'}').format(cat),)
         print
     
         for i,variable in enumerate(X.columns):
-            print ('{:>'+str(variablelength)+'}').format(variable),
-            print ('{:>'+str(length)+'.3}').format(np.average(X[variable], weights=w)),
+            print(('{:>'+str(variablelength)+'}').format(variable),)
+            print(('{:>'+str(length)+'.3}').format(np.average(X[variable], weights=w)),)
             for cat in uniquecategories:
-                print ('{:>'+str(length)+'.3}').format(np.average(X[variable][categories==cat], weights=w[categories==cat])),
-            print
-        print "\n"
+                print(('{:>'+str(length)+'.3}').format(np.average(X[variable][categories==cat], weights=w[categories==cat])),)
+            print()
+        print("\n")
         
-        print "variance"
-        print ('{:>'+str(variablelength)+'}').format("variable/class"),
-        print ('{:>'+str(length)+'}').format("all"),
+        print("variance")
+        print(('{:>'+str(variablelength)+'}').format("variable/class"),)
+        print(('{:>'+str(length)+'}').format("all"),)
         for cat in uniquecategories:
-            print ('{:>'+str(length)+'}').format(cat),
-        print
+            print(('{:>'+str(length)+'}').format(cat),)
+        print()
     
         for i,variable in enumerate(X.columns):
-            print ('{:>'+str(variablelength)+'}').format(variable),
-            print ('{:>'+str(length)+'.3}').format(variance(X[variable], weights=w)),
+            print(('{:>'+str(variablelength)+'}').format(variable),)
+            print(('{:>'+str(length)+'.3}').format(variance(X[variable], weights=w)),)
             for cat in uniquecategories:
-                print ('{:>'+str(length)+'.3}').format(variance(X[variable][categories==cat], weights=w[categories==cat])),
-            print
-        print "\n"
+                print(('{:>'+str(length)+'.3}').format(variance(X[variable][categories==cat], weights=w[categories==cat])),)
+            print()
+        print("\n")
 
-        print "min/max"
-        print ('{:>'+str(variablelength)+'}').format("variable/class"),
-        print ('{:>'+str(length)+'}').format("all/min"),
-        print ('{:>'+str(length)+'}').format("all/max"),
+        print("min/max")
+        print(('{:>'+str(variablelength)+'}').format("variable/class"),)
+        print(('{:>'+str(length)+'}').format("all/min"),)
+        print(('{:>'+str(length)+'}').format("all/max"),)
         for cat in uniquecategories:
-            print ('{:>'+str(length)+'}').format(str(cat)+"/min"),
-            print ('{:>'+str(length)+'}').format(str(cat)+"/max"),
-        print
+            print(('{:>'+str(length)+'}').format(str(cat)+"/min"),)
+            print(('{:>'+str(length)+'}').format(str(cat)+"/max"),)
+        print()
     
         for i,variable in enumerate(X.columns):
-            print ('{:>'+str(variablelength)+'}').format(variable),
-            print ('{:>'+str(length)+'.3}').format(float(np.min(X[variable]))),
-            print ('{:>'+str(length)+'.3}').format(float(np.max(X[variable]))),
+            print(('{:>'+str(variablelength)+'}').format(variable),)
+            print(('{:>'+str(length)+'.3}').format(float(np.min(X[variable]))),)
+            print(('{:>'+str(length)+'.3}').format(float(np.max(X[variable]))),)
             for cat in uniquecategories:
-                print ('{:>'+str(length)+'.3}').format(float(np.min(X[variable][categories==cat]))),
-                print ('{:>'+str(length)+'.3}').format(float(np.max(X[variable][categories==cat]))),
-            print
-        print "\n"
+                print(('{:>'+str(length)+'.3}').format(float(np.min(X[variable][categories==cat]))),)
+                print(('{:>'+str(length)+'.3}').format(float(np.max(X[variable][categories==cat]))),)
+            print()
+        print("\n")
     
 def variance(values, weights=None, axis=0):
     """ returns weighted (biased) variance

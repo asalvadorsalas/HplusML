@@ -1,4 +1,5 @@
 """Module with class that provides the H+ data for machine learning functions"""
+
 import numpy as np
 import HpMLUtils
 from sklearn.model_selection import train_test_split
@@ -31,13 +32,14 @@ class HpTrainingFrame:
         isbackgroundseries=~self.pandasframe.process.str.contains("Hp")
         return regionseries & (issignalseries | isbackgroundseries)
 
-    def get_features_classes_weights(self,region, hpmass,addMass=False, invertsignal=False, regression=False):
+    def get_features_classes_weights(self,region, hpmass,addMass=False, invertsignal=False, regression=False, absoluteWeight=True):
         """returns a features data frame, a classes and a weights Series
            region: string, region of the events to be returned
            hpmass: string "multi" or integer specifying the H+ mass
            addMass: bool if True the truth H+ mass is added to the feature matrix (for parameterized ML training)
            invertsignal: if true all signal points except for hpmass are selected
            regression: bool, if false y will be 0=background or 1=signal, if true it will be the hp mass or 0 for background
+           absoluteWeight: bool, true by default, if true the absolute value of the weights will be returned, if false also negative values will be returned
         """
         
         mask=self.get_pandasframe_mask(region, hpmass, invertsignal=invertsignal)
@@ -45,7 +47,11 @@ class HpTrainingFrame:
             features=self.pandasframe[mask].loc[:,self.feature_names+["hpmass"]].copy()
         else:
             features=self.pandasframe[mask].loc[:,self.feature_names].copy()
-        weights=abs(self.pandasframe[mask].weight)
+        
+        weights=self.pandasframe[mask].weight
+        if absoluteWeight:
+            weights=abs(weights)
+
         if regression: 
             classes=self.pandasframe[mask].process.apply(lambda mass: self.backgroundclass if not "Hp" in mass else float(mass.replace("Hp","")))
         else:
@@ -68,7 +74,7 @@ class HpTrainingFrame:
         mask=self.get_pandasframe_mask(region, hpmass, invertsignal=invertsignal)
         return self.pandasframe[mask].eventNumber.apply(lambda x: 0 if x%100 in digits_train else 1 if x%100 in digits_test else 2)
 
-    def prepare(self, region="INC_ge6jge4b", hpmass="multi", random=False, shuffle=True, addMass=False, invertsignal=False, regression=False):
+    def prepare(self, region="INC_ge6jge4b", hpmass="multi", random=False, shuffle=True, addMass=False, invertsignal=False, regression=False, absoluteWeight=True):
         """ returns feature matrices, class labels and weights for training, testing and evaluation datasets (X_train, y_train, w_train, X_test, y_test, w_test, X_eval, y_eval, w_eval)
             region: string, region of the events to be returned
             hpmass: string "multi" or integer specifying the H+ mass
@@ -77,9 +83,10 @@ class HpTrainingFrame:
             addMass: bool if True the truth H+ mass is added to the feature matrix (for parameterized ML training)
             invertsignal: if true all signal points except for hpmass are selected
             regression: bool, if false y will be 0=background or 1=signal, if true it will be the hp mass or 0 for background
+            absoluteWeight: bool, true by default, if true the absolute value of the weights will be returned, if false also negative values will be returned
         """
 
-        features, classes, weights=self.get_features_classes_weights(region,hpmass, addMass=addMass, invertsignal=invertsignal, regression=regression)
+        features, classes, weights=self.get_features_classes_weights(region,hpmass, addMass=addMass, invertsignal=invertsignal, regression=regression, absoluteWeight=absoluteWeight)
         if random:
             #mask=self.get_pandasframe_mask(region, hpmass, invertsignal=invertsignal)
             #print mask.shape, features.shape, classes.shape, weights.shape, mask.sum()

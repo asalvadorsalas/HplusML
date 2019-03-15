@@ -1,5 +1,6 @@
 """Module for the optimisation of Hyperparameters for a wide range of ML algorithms"""
 
+from __future__ import print_function
 from sklearn.ensemble import AdaBoostClassifier, GradientBoostingClassifier,GradientBoostingRegressor,AdaBoostRegressor
 from sklearn.metrics import roc_curve,roc_auc_score, auc
 import numpy as np
@@ -60,7 +61,7 @@ class HpOptimise():
                 test=1.-roc_auc_score(y_test, self.method.predict(X_test), sample_weight=w_test)
                 train=1.-roc_auc_score(y_train,self.method.predict(X_train), sample_weight=w_train)
         else:
-            print "Unknown ML algorithm, neither regressor nor classifier"
+            print("Unknown ML algorithm, neither regressor nor classifier")
         return test, train
 
     def trainAndTest(self, stagedresults=False, options={}, silent=False):
@@ -72,10 +73,10 @@ class HpOptimise():
         
         self.method.set_params(**options)
         if not silent:
-            print "starting training"
+            print("starting training")
         self.method.fit(self.X_train, self.y_train, sample_weight = self.w_train)
         if not silent:
-            print "training done"
+            print("training done")
         ret=self.test(stagedresults=stagedresults, X_train=self.X_train, y_train=self.y_train, w_train=self.w_train, X_test=self.X_test, y_test=self.y_test, w_test=self.w_test)
         self.method.set_params(**self.default_options)
         return ret
@@ -182,16 +183,16 @@ class HpOptimise():
         
         #title=self.name+" "+str(self.method.get_params())
         if fit:
-            print "starting training"
+            print("starting training")
             self.method.fit(self.X_train, self.y_train, sample_weight = self.w_train)
-            print "training done"
+            print("training done")
         self.drawROCCurve()
         if filename is None:
             filename="roccurve_"+type(self.method).__name__+"_"+self.name
             for key in sorted(self.method.get_params().keys()):
                 filename=filename+"_"+key+str(self.method.get_params()[key]).replace(".","")
             filename+=".png"
-        print "Saving plot as ", filename
+        print("Saving plot as ", filename)
         plt.savefig(filename)
         
     def calculateLearningCurve(self,train_sizes=np.linspace(.1, 1.0, 10), category="all", writetotxt=False):
@@ -253,7 +254,7 @@ class HpOptimise():
                     train_scores.append(arr[2])
                     test_scores.append(arr[1])
                 else:
-                    print line
+                    print(line)
 
         plt.figure()
         plt.title(title, fontsize=10)
@@ -281,7 +282,7 @@ class HpOptimise():
             for key in sorted(self.method.get_params().keys()):
                 filename=filename+"_"+key+str(self.method.get_params()[key]).replace(".","")
             filename+=".png"
-        print "Saving plot as ", filename
+        print("Saving plot as ", filename)
         plt.savefig(filename)
         
     def calculateValidationCurve(self, variable="learning_rate", values=None, writetotxt=False):
@@ -313,7 +314,7 @@ class HpOptimise():
             options=self.default_options
             
             options[variable]=value
-            print "Training for ", value
+            print("Training for ", value)
             if writetotxt:
                 txtfile.write("Classifier name="+self.name+" "+str(options)+"\n")
             test,train=self.trainAndTest(stagedresults=True, silent=True, options=options)
@@ -410,7 +411,7 @@ class HpOptimise():
                 filename=filename+"_"+key+str(self.method.get_params()[key]).replace(".","")
             filename+=".png"
                           
-        print "Saving plot as ", filename
+        print("Saving plot as ", filename)
         plt.savefig(filename)
         
     def saveAllValidationCurves(self):
@@ -419,7 +420,7 @@ class HpOptimise():
         variables=self.getParamGrid().keys()
         for variable in variables:
             if variable!="n_estimators":
-                print "Validation curve for", variable
+                print("Validation curve for", variable)
                 self.saveValidationCurve(variable=variable)
     
     def randomSearch(self):
