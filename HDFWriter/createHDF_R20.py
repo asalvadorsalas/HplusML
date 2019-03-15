@@ -9,6 +9,7 @@ btagWP=70
 hpanalysis=HpAnalysis(20,btagWP,"fitconfigR20.json")
 #hpanalysis.readData(['data'])
 hpanalysis.readData() #regions=['INC_ge6jge4b'], samples=["Hp300"])
+#hpanalysis.readData(regions=['INC_ge6jge4b'], samples=["Hp300"])
 df_mc=hpanalysis.df_mc.drop("jet_pt", axis=1)
 
 hdf =HDFStore(path+"/pandas_allregions.h5")
