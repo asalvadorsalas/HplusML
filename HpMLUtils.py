@@ -22,11 +22,11 @@ def getXy():
 def summarizeFitData(X, y, w=None, categories=None, showavevarminmax=True):
     """ prints a summary of the X=features, y=classes, w=weights data on the command line"""
     
-    print("X.shape=", X.shape, "y.shape=", y.shape,)
+    print("X.shape=", X.shape, "y.shape=", y.shape,end="")
     if w is None:
         w=pd.Series(np.ones(y.shape))
     else:
-        print("w.shape=", w.shape,)
+        print("w.shape=", w.shape,end="")
 
     print()
     print("columns=", X.columns)
@@ -48,51 +48,51 @@ def summarizeFitData(X, y, w=None, categories=None, showavevarminmax=True):
     if showavevarminmax:
         print("average")
         variablelength=max([len(x) for x in X.columns]+[len("variable/class")])
-        print(('{:>'+str(variablelength)+'}').format("variable/class"),)
-        print(('{:>'+str(length)+'}').format("all"),)
+        print(('{:>'+str(variablelength)+'}').format("variable/class"),end="")
+        print(('{:>'+str(length)+'}').format("all"),end="")
         for cat in uniquecategories:
-            print(('{:>'+str(length)+'}').format(cat),)
+            print(('{:>'+str(length)+'}').format(cat),end="")
         print
     
         for i,variable in enumerate(X.columns):
-            print(('{:>'+str(variablelength)+'}').format(variable),)
-            print(('{:>'+str(length)+'.3}').format(np.average(X[variable], weights=w)),)
+            print(('{:>'+str(variablelength)+'}').format(variable),end="")
+            print(('{:>'+str(length)+'.3}').format(np.average(X[variable], weights=w)),end="")
             for cat in uniquecategories:
-                print(('{:>'+str(length)+'.3}').format(np.average(X[variable][categories==cat], weights=w[categories==cat])),)
+                print(('{:>'+str(length)+'.3}').format(np.average(X[variable][categories==cat], weights=w[categories==cat])),end="")
             print()
         print("\n")
         
         print("variance")
-        print(('{:>'+str(variablelength)+'}').format("variable/class"),)
-        print(('{:>'+str(length)+'}').format("all"),)
+        print(('{:>'+str(variablelength)+'}').format("variable/class"),end="")
+        print(('{:>'+str(length)+'}').format("all"),end="")
         for cat in uniquecategories:
-            print(('{:>'+str(length)+'}').format(cat),)
+            print(('{:>'+str(length)+'}').format(cat),end="")
         print()
     
         for i,variable in enumerate(X.columns):
-            print(('{:>'+str(variablelength)+'}').format(variable),)
-            print(('{:>'+str(length)+'.3}').format(variance(X[variable], weights=w)),)
+            print(('{:>'+str(variablelength)+'}').format(variable),end="")
+            print(('{:>'+str(length)+'.3}').format(variance(X[variable], weights=w)),end="")
             for cat in uniquecategories:
-                print(('{:>'+str(length)+'.3}').format(variance(X[variable][categories==cat], weights=w[categories==cat])),)
+                print(('{:>'+str(length)+'.3}').format(variance(X[variable][categories==cat], weights=w[categories==cat])),end="")
             print()
         print("\n")
 
         print("min/max")
-        print(('{:>'+str(variablelength)+'}').format("variable/class"),)
-        print(('{:>'+str(length)+'}').format("all/min"),)
-        print(('{:>'+str(length)+'}').format("all/max"),)
+        print(('{:>'+str(variablelength)+'}').format("variable/class"),end="")
+        print(('{:>'+str(length)+'}').format("all/min"),end="")
+        print(('{:>'+str(length)+'}').format("all/max"),end="")
         for cat in uniquecategories:
-            print(('{:>'+str(length)+'}').format(str(cat)+"/min"),)
-            print(('{:>'+str(length)+'}').format(str(cat)+"/max"),)
+            print(('{:>'+str(length)+'}').format(str(cat)+"/min"),end="")
+            print(('{:>'+str(length)+'}').format(str(cat)+"/max"),end="")
         print()
     
         for i,variable in enumerate(X.columns):
-            print(('{:>'+str(variablelength)+'}').format(variable),)
-            print(('{:>'+str(length)+'.3}').format(float(np.min(X[variable]))),)
-            print(('{:>'+str(length)+'.3}').format(float(np.max(X[variable]))),)
+            print(('{:>'+str(variablelength)+'}').format(variable),end="")
+            print(('{:>'+str(length)+'.3}').format(float(np.min(X[variable]))),end="")
+            print(('{:>'+str(length)+'.3}').format(float(np.max(X[variable]))),end="")
             for cat in uniquecategories:
-                print(('{:>'+str(length)+'.3}').format(float(np.min(X[variable][categories==cat]))),)
-                print(('{:>'+str(length)+'.3}').format(float(np.max(X[variable][categories==cat]))),)
+                print(('{:>'+str(length)+'.3}').format(float(np.min(X[variable][categories==cat]))),end="")
+                print(('{:>'+str(length)+'.3}').format(float(np.max(X[variable][categories==cat]))),end="")
             print()
         print("\n")
     
