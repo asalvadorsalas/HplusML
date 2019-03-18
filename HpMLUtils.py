@@ -52,7 +52,7 @@ def summarizeFitData(X, y, w=None, categories=None, showavevarminmax=True):
         print(('{:>'+str(length)+'}').format("all"),end="")
         for cat in uniquecategories:
             print(('{:>'+str(length)+'}').format(cat),end="")
-        print
+        print("")
     
         for i,variable in enumerate(X.columns):
             print(('{:>'+str(variablelength)+'}').format(variable),end="")
