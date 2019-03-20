@@ -52,7 +52,7 @@ class HpFeedForwardModel():
     def __init__(self, configuration, l2threshold=None, dropout=None, verbose=True):
         """ constructor
         configuration: list of the number of nodes per layer, each item is a layer
-        l2threshold: if not None a L2 weight regularizer with threshold <l2treshold> is added to each leayer
+        l2threshold: if not None a L2 weight regularizer with threshold <l2threshold> is added to each leayer
         dropout: if not None a dropout fraction of <dropout> is added after each internal layer
         verbose: if true the model summary is printed
         """
@@ -64,15 +64,15 @@ class HpFeedForwardModel():
         self.model = Sequential()
         for i,layer in enumerate(configuration):
             if i==0:
-                if l2treshold==None:
+                if l2threshold==None:
                     model.add(Dense(layer, input_dim=15, activation='relu'))    
                 else:
-                    model.add(Dense(layer, input_dim=15, activation='relu', kernel_regularizer=regularizers.l2(l2treshold)))    
+                    model.add(Dense(layer, input_dim=15, activation='relu', kernel_regularizer=regularizers.l2(l2threshold)))    
             else:
-                if l2treshold==None:
+                if l2threshold==None:
                     model.add(Dense(layer, activation='relu'))
                 else:
-                    model.add(Dense(layer, activation='relu', kernel_regularizer=regularizers.l2(l2treshold)))
+                    model.add(Dense(layer, activation='relu', kernel_regularizer=regularizers.l2(l2threshold)))
             if dropout!=None:
                 model.add(Dropout(rate=dropout))
         #final layer is a sigmoid for classification
