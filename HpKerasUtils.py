@@ -62,7 +62,7 @@ class HpFeedForwardModel():
         self.dropout=dropout
         self.l2threshold=l2threshold
         self.model = Sequential()
-        for i,layer in enumerate(layers):
+        for i,layer in enumerate(configuration):
             if i==0:
                 if l2treshold==None:
                     model.add(Dense(layer, input_dim=15, activation='relu'))    
