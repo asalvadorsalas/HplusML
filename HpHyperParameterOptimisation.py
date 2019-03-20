@@ -40,14 +40,14 @@ class HpOptimise():
         if self.method._estimator_type=="classifier":
             if stagedresults:
                 test = np.empty(len(self.method.estimators_))
-                for i, pred in enumerate(self.method.staged_decision_function(X_test)):
+                for i, pred in enumerate(self.method.staged_predict_proba(X_test)):
                     test[i]=1.-roc_auc_score(y_test, pred, sample_weight=w_test)
                 train = np.empty(len(self.method.estimators_))
-                for i, pred in enumerate(self.method.staged_decision_function(X_train)):
+                for i, pred in enumerate(self.method.staged_predict_proba(X_train)):
                     train[i]=1.-roc_auc_score(y_train, pred, sample_weight=w_train)
             else:
-                test=1.-roc_auc_score(y_test, self.method.decision_function(X_test), sample_weight=w_test)
-                train=1.-roc_auc_score(y_train,self.method.decision_function(X_train), sample_weight=w_train)
+                test=1.-roc_auc_score(y_test, self.method.predict_proba(X_test), sample_weight=w_test)
+                train=1.-roc_auc_score(y_train,self.method.predict_proba(X_train), sample_weight=w_train)
 
         elif self.method._estimator_type=="regressor": #regressor
             if stagedresults:
@@ -156,10 +156,10 @@ class HpOptimise():
 
     def drawROCCurve(self):
         """Compute and draw ROC curve (+area under the curve)
-           requires decision_function for ML algorithm
+           requires predict_proba for ML algorithm
         """
 
-        fpr, tpr, thresholds = roc_curve(self.y_test, self.method.decision_function(self.X_test), sample_weight = self.w_test)
+        fpr, tpr, thresholds = roc_curve(self.y_test, self.method.predict_proba(self.X_test), sample_weight = self.w_test)
 
         roc_auc = auc(fpr, tpr, reorder=True)
 
