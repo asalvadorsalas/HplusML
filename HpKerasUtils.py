@@ -134,7 +134,7 @@ class HpFeedForwardModel():
         val_rocauc_values=None
         bestepoch=None
         for cb in self.callbacks:
-            if hasattr(cb, 'roc') and hasattr(cb, 'roc_val') and:
+            if hasattr(cb, 'roc') and hasattr(cb, 'roc_val'):
                 rocauc_values=cb.roc
                 val_rocauc_values=cb.roc_val
             if hasattr(cb, 'stopped_epoch') and hasattr(cb, 'patience'):
