@@ -102,7 +102,7 @@ class HpFeedForwardModel():
         if self.callbacks==None:
             self.callbacks=[EarlyStopping(monitor='val_loss', 
                                           patience=patience),
-                            ModelCheckpoint(filepath='model_nn_'+str(self.configuration)+"_dropout"+self.dropout+"_l2threshold"+self.l2threshold+".hdf5", 
+                            ModelCheckpoint(filepath='model_nn_'+str(self.configuration)+"_dropout"+str(self.dropout)+"_l2threshold"+str(self.l2threshold)+".hdf5", 
                                             monitor='val_loss',
                                             save_best_only=True),
                             RocCallback(training_data=trainData,validation_data=testData)
@@ -111,7 +111,7 @@ class HpFeedForwardModel():
                                     batch_size=50, epochs=epochs, callbacks=self.callbacks,
                                     validation_data=testData)
 
-        model.load_weights("model_nn_"+str(self.configuration)+"_dropout"+self.dropout+"_l2threshold"+self.l2threshold+".hdf5")
+        model.load_weights("model_nn_"+str(self.configuration)+"_dropout"+str(self.dropout)+"_l2threshold"+str(self.l2threshold)+".hdf5")
         y_pred_test=model.predict(X_test).ravel()
         y_pred_train=model.predict(X_train).ravel()
         roc_test =roc_auc_score(y_test,  y_pred_test,  sample_weight=w_test)
