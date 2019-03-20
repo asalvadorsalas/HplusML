@@ -65,26 +65,24 @@ class HpFeedForwardModel():
         for i,layer in enumerate(configuration):
             if i==0:
                 if l2threshold==None:
-                    model.add(Dense(layer, input_dim=15, activation='relu'))    
+                    self.model.add(Dense(layer, input_dim=15, activation='relu'))    
                 else:
-                    model.add(Dense(layer, input_dim=15, activation='relu', kernel_regularizer=regularizers.l2(l2threshold)))    
+                    self.model.add(Dense(layer, input_dim=15, activation='relu', kernel_regularizer=regularizers.l2(l2threshold)))    
             else:
                 if l2threshold==None:
-                    model.add(Dense(layer, activation='relu'))
+                    self.model.add(Dense(layer, activation='relu'))
                 else:
-                    model.add(Dense(layer, activation='relu', kernel_regularizer=regularizers.l2(l2threshold)))
+                    self.model.add(Dense(layer, activation='relu', kernel_regularizer=regularizers.l2(l2threshold)))
             if dropout!=None:
-                model.add(Dropout(rate=dropout))
+                self.model.add(Dropout(rate=dropout))
         #final layer is a sigmoid for classification
-        model.add(Dense(1, activation='sigmoid'))
+        self.model.add(Dense(1, activation='sigmoid'))
         #model.add(Dense(5, activation='relu'))
 
         # Compile model
-        model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['binary_accuracy'])
+        self.model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['binary_accuracy'])
         if verbose:
-            model.summary()
-
-        return model
+            self.model.summary()
     
     def train(self, trainData, testData, epochs=100, patience=15):
         """ train the Keras model with Early stopping, will return test and training ROC AUC
