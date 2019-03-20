@@ -112,9 +112,9 @@ class HpFeedForwardModel():
                                     batch_size=50, epochs=epochs, callbacks=self.callbacks,
                                     validation_data=testData)
 
-        model.load_weights("model_nn_"+str(self.configuration)+"_dropout"+str(self.dropout)+"_l2threshold"+str(self.l2threshold)+".hdf5")
-        y_pred_test=model.predict(X_test).ravel()
-        y_pred_train=model.predict(X_train).ravel()
+        self.model.load_weights("model_nn_"+str(self.configuration)+"_dropout"+str(self.dropout)+"_l2threshold"+str(self.l2threshold)+".hdf5")
+        y_pred_test=self.model.predict(X_test).ravel()
+        y_pred_train=self.model.predict(X_train).ravel()
         roc_test =roc_auc_score(y_test,  y_pred_test,  sample_weight=w_test)
         roc_train=roc_auc_score(y_train, y_pred_train, sample_weight=w_train)
         #print(self.configuration, roc_test, roc_train)
