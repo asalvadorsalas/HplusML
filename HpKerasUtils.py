@@ -49,10 +49,10 @@ class RocCallback(Callback):
 class HpFeedForwardModel():
     """ A simple feed forward NN based on Keras"""
 
-    def __init__(self, configuration, l2treshold=None, dropout=None, verbose=True):
+    def __init__(self, configuration, l2threshold=None, dropout=None, verbose=True):
         """ constructor
         configuration: list of the number of nodes per layer, each item is a layer
-        l2treshold: if not None a L2 weight regularizer with threshold <l2treshold> is added to each leayer
+        l2threshold: if not None a L2 weight regularizer with threshold <l2treshold> is added to each leayer
         dropout: if not None a dropout fraction of <dropout> is added after each internal layer
         verbose: if true the model summary is printed
         """
