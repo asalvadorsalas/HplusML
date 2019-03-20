@@ -5,6 +5,7 @@ from keras.layers import Dense, Dropout
 from keras import regularizers
 from sklearn.metrics import roc_auc_score
 from keras.callbacks import Callback, EarlyStopping, ModelCheckpoint
+import matplotlib.pyplot as plt
 
 class RocCallback(Callback):
     """ A Keras callback that calculates the ROC AUC"""
