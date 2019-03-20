@@ -131,13 +131,13 @@ class HpFeedForwardModel():
 
         rocauc_values=None
         val_rocauc_values=None
+        bestepoch=None
         for cb in self.callbacks:
             if hasattr(cb, 'property'):
                 rocauc_values=cb.roc
                 val_rocauc_values=cb.roc_val
-
-
-        bestepoch=callbacks[0].stopped_epoch-callbacks[0].patience+1
+            if hasattr(cb, 'stopped_epoch'):
+                bestepoch=cb.stopped_epoch-cb.patience+1
   
         epochs=range(1,len(acc_values)+1)
         plt.figure()
@@ -146,7 +146,8 @@ class HpFeedForwardModel():
         plt.legend(loc=0)
         plt.xlabel("Epochs")
         plt.ylabel("Loss")
-        plt.axvline(x=bestepoch)
+        if not bestepoch is None:
+            plt.axvline(x=bestepoch)
 
         ax=plt.figure()
         plt.plot(epochs, acc_values, "bo",label="Training acc")
@@ -154,7 +155,8 @@ class HpFeedForwardModel():
         plt.legend(loc=0)
         plt.xlabel("Epochs")
         plt.ylabel("Accuracy")
-        plt.axvline(x=bestepoch)
+        if not bestepoch is None:
+            plt.axvline(x=bestepoch)
 
         if not rocauc_values is None:
             ax=plt.figure()
@@ -163,4 +165,5 @@ class HpFeedForwardModel():
             plt.legend(loc=0)
             plt.xlabel("Epochs")
             plt.ylabel("ROC AUC")
-            plt.axvline(x=bestepoch)
+            if not bestepoch is None:
+                plt.axvline(x=bestepoch)
