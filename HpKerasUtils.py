@@ -109,6 +109,8 @@ class HpFeedForwardModel():
                                                   monitor='val_loss',
                                                   save_best_only=True))
             self.callbacks.append(RocCallback(training_data=trainData,validation_data=testData))
+        else:
+            self.callbacks=callbacks
 
         self.history=self.model.fit(X_train,y_train, sample_weight=w_train,
                                     batch_size=50, epochs=epochs, callbacks=self.callbacks,
