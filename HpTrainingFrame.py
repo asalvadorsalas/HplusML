@@ -95,4 +95,4 @@ class HpTrainingFrame:
             return X_train, X_test, None, y_train, y_test, None, w_train, w_test, None #evaluation split is empty
         else:
             split_series=self.get_split_series(region, hpmass, invertsignal=invertsignal)
-        return HpMLUtils.train_test_split3(features,classes,weights, shuffle=shuffle, test_fold=split_series)
+        return HpMLUtils.train_test_split3(features,classes,weights, shuffle=shuffle, test_fold=split_series, random_state=self.random_state)
