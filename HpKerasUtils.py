@@ -86,12 +86,13 @@ class HpFeedForwardModel():
         if verbose:
             self.model.summary()
     
-    def train(self, trainData, testData, epochs=100, patience=15):
+    def train(self, trainData, testData, epochs=100, patience=15, callbacks=None):
         """ train the Keras model with Early stopping, will return test and training ROC AUC
         trainData: tuple of (X_train, y_train, w_train)
         trainData: tuple of (X_test, y_test, w_test)
         epochs: maximum number of epochs for training
         patience: patience for Early stopping based on validation loss
+        callbacks: 
         """
 
         X_train=trainData[0]
@@ -101,12 +102,13 @@ class HpFeedForwardModel():
         y_test=testData[1]
         w_test=testData[2]
 
-        self.callbacks.append(EarlyStopping(monitor='val_loss', 
-                                            patience=patience))
-        self.callbacks.append(ModelCheckpoint(filepath='model_nn_'+str(self.configuration)+"_dropout"+str(self.dropout)+"_l2threshold"+str(self.l2threshold)+".hdf5", 
-                                              monitor='val_loss',
-                                              save_best_only=True))
-        self.callbacks.append(RocCallback(training_data=trainData,validation_data=testData))
+        if not callbacks is None:
+            self.callbacks.append(EarlyStopping(monitor='val_loss', 
+                                                patience=patience))
+            self.callbacks.append(ModelCheckpoint(filepath='model_nn_'+str(self.configuration)+"_dropout"+str(self.dropout)+"_l2threshold"+str(self.l2threshold)+".hdf5", 
+                                                  monitor='val_loss',
+                                                  save_best_only=True))
+            self.callbacks.append(RocCallback(training_data=trainData,validation_data=testData))
 
         self.history=self.model.fit(X_train,y_train, sample_weight=w_train,
                                     batch_size=50, epochs=epochs, callbacks=self.callbacks,
