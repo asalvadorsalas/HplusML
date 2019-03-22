@@ -13,7 +13,8 @@ class HpTrainingFrame:
         self.pandasframe=pandasframe
         self.backgroundclass=backgroundclass
         self.feature_names=["nJets","nBTags_70","pT_jet1","Mbb_MindR_70","pT_jet5","H1_all","dRbb_avg_70","dRlepbb_MindR_70","Muu_MindR_70","HT_jets","Mbb_MaxPt_70","Mbb_MaxM_70","Mjjj_MaxPt","Centrality_all"]
-        
+        self.random_state=123456789
+
     def get_pandasframe_mask(self, region, hpmass, invertsignal=False):
         """return as mask (true/false) of which events are to be included in the different samples (e.g. removes unwanted H+ masses)
            region: string name of the region
@@ -90,7 +91,7 @@ class HpTrainingFrame:
         if random:
             #mask=self.get_pandasframe_mask(region, hpmass, invertsignal=invertsignal)
             #print mask.shape, features.shape, classes.shape, weights.shape, mask.sum()
-            X_train, X_test,  y_train, y_test, w_train, w_test = train_test_split(features, classes, weights, test_size=0.5,shuffle=True, random_state=None)
+            X_train, X_test,  y_train, y_test, w_train, w_test = train_test_split(features, classes, weights, test_size=0.5,shuffle=True, random_state=self.random_state)
             return X_train, X_test, None, y_train, y_test, None, w_train, w_test, None #evaluation split is empty
         else:
             split_series=self.get_split_series(region, hpmass, invertsignal=invertsignal)
