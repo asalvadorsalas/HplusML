@@ -102,7 +102,7 @@ class HpFeedForwardModel():
         y_test=testData[1]
         w_test=testData[2]
 
-        if not callbacks is None:
+        if callbacks is None:
             self.callbacks.append(EarlyStopping(monitor='val_loss', 
                                                 patience=patience))
             self.callbacks.append(ModelCheckpoint(filepath='model_nn_'+str(self.configuration)+"_dropout"+str(self.dropout)+"_l2threshold"+str(self.l2threshold)+".hdf5", 
