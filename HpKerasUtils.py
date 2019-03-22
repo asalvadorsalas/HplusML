@@ -59,7 +59,7 @@ class HpFeedForwardModel():
         verbose: if true the model summary is printed
         """
         
-        self.callbacks = None
+        self.callbacks = []
         self.configuration=configuration
         self.dropout=dropout
         self.l2threshold=l2threshold
@@ -101,14 +101,13 @@ class HpFeedForwardModel():
         y_test=testData[1]
         w_test=testData[2]
 
-        if self.callbacks==None:
-            self.callbacks=[EarlyStopping(monitor='val_loss', 
-                                          patience=patience),
-                            ModelCheckpoint(filepath='model_nn_'+str(self.configuration)+"_dropout"+str(self.dropout)+"_l2threshold"+str(self.l2threshold)+".hdf5", 
-                                            monitor='val_loss',
-                                            save_best_only=True),
-                            RocCallback(training_data=trainData,validation_data=testData)
-                            ]
+        self.callbacks.append(EarlyStopping(monitor='val_loss', 
+                                            patience=patience))
+        self.callbacks.append(ModelCheckpoint(filepath='model_nn_'+str(self.configuration)+"_dropout"+str(self.dropout)+"_l2threshold"+str(self.l2threshold)+".hdf5", 
+                                              monitor='val_loss',
+                                              save_best_only=True))
+        self.callbacks.append(RocCallback(training_data=trainData,validation_data=testData))
+
         self.history=self.model.fit(X_train,y_train, sample_weight=w_train,
                                     batch_size=50, epochs=epochs, callbacks=self.callbacks,
                                     validation_data=testData)
