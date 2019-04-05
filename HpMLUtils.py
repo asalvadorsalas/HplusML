@@ -285,227 +285,36 @@ def train_test_split3(*arrays, **options):
                                      safe_indexing(a, test),
                                      safe_indexing(a, evalu)) for a in arrays))
 
-
-class WeightedStandardScaler(BaseEstimator, TransformerMixin):
-    """Class which transforms all features to have average 0 and variance 1, same as scikit-learn StandardScaler, but taking weights into account """
+class FeatureDivider():
+    """Class which takes a feature matrix and divides all columns by another column (requires pandas DS as input)"""
         
-    def __init__(self, copy=True, with_mean=True, with_std=True):
-        """ with_mean: boolean, if true transfroms weighted average to 0
-            with_std: boolean, if true transforms weighted variance to 1
-            copy: boolean, if true copies data, if false change data in place
+    def __init__(self, divisorcolumn, excludecolumns=["nJets","nBTags_70"]):
+        """ divisorcolumn: name of the column that other columns should be divided by
         """
         
-        self.with_mean = with_mean
-        self.with_std = with_std
-        self.copy = copy
-
-    def _reset(self):
-        """Reset internal data-dependent state of the scaler, if necessary.
-        __init__ parameters are not touched.
-        """
-
-        # Checking one attribute is enough, becase they are all set together
-        # in partial_fit
-        if hasattr(self, 'scale_'):
-            del self.scale_
-            del self.mean_
-            del self.var_
+        self.divisorcolumn = divisorcolumn
+        self.excludecolumns=excludecolumns
 
     def fit(self, X, y=None, sample_weight=None):
-        """Compute the mean and std to be used for later scaling.
-        Parameters
-        ----------
-        X : {array-like, sparse matrix}, shape [n_samples, n_features]
-            The data used to compute the mean and standard deviation
-            used for later scaling along the features axis.
-        y
-            Ignored
+        """function has no effect, exists so that class can be used with pipelines
         """
-
-        # Reset internal state before fitting
-        self._reset()
-
-        if self.with_mean:
-            self.mean_ = np.average(X,axis=0,weights=sample_weight)
-        if self.with_std:
-            self.var_ = variance(X,weights=sample_weight)
-            #np.average((X-self.mean_)*(X-self.mean_),axis=0, weights=sample_weight)
-            self.scale_ = np.sqrt(self.var_)
 
         return self
          
-    def transform(self, X, y='deprecated', copy=None):
+    def transform(self, X, y='deprecated', sample_weight=None):
         """Perform standardization by centering and scaling
         Parameters
         ----------
         X : array-like, shape [n_samples, n_features]
-            The data used to scale along the features axis.
-        y : (ignored)
+            The data with the columns that should be divided
+        y : (not affected)
+        sample_weight : (not affected)
         """   
 
-        check_is_fitted(self, 'scale_')
+        for column in X.columns:
+            if column in self.excludecolumns or column==self.divisorcolumn:
+                continue
+            
+            X[column+"div"+self.divisorcolumn]=X[column]/X[self.divisorcolumn]
 
-        copy = copy if copy is not None else self.copy
-
-        #X = check_array(X, copy=copy, warn_on_dtype=True,
-        #                estimator=self, dtype=FLOAT_DTYPES,
-        #                force_all_finite='allow-nan')
-
-        if self.with_mean:
-            X -= self.mean_
-        if self.with_std:
-            X /= self.scale_
-        return X
-
-    def inverse_transform(self, X, copy=None):
-        """ inverse transformation (see transform)"""
-        
-        check_is_fitted(self, 'scale_')
-
-        copy = copy if copy is not None else self.copy
-
-        #X = check_array(X, copy=copy, warn_on_dtype=True,
-        #                estimator=self, dtype=FLOAT_DTYPES,
-        #                force_all_finite='allow-nan')
-
-        if self.with_mean:
-            X += self.mean_
-        if self.with_std:
-            X *= self.scale_
-        return X
-
-class WeightedStandardScalerForHp(WeightedStandardScaler):
-    """ Same as WeightedStandardScaler however having a special transformation for njets and nbjets (as those are integer variables we just divide by 10)"""
-
-    def fit(self, X, y=None, sample_weight=None):
-        """Compute the mean and std to be used for later scaling.
-        Parameters
-        ----------
-        X : {array-like, sparse matrix}, shape [n_samples, n_features]
-            The data used to compute the mean and standard deviation
-            used for later scaling along the features axis.
-        y
-            Ignored
-        """
-
-        # Reset internal state before fitting
-        self._reset()
-
-        if self.with_mean:
-            self.mean_ = np.average(X,axis=0,weights=sample_weight)
-        if self.with_std:
-            self.var_ = variance(X,weights=sample_weight)
-            #np.average((X-self.mean_)*(X-self.mean_),axis=0, weights=sample_weight)
-            self.scale_ = np.sqrt(self.var_)
-
-        for i,col in enumerate(X.columns):
-            if col=="nJets" or "nBTags" in col:
-                self.mean_[i]=0
-                self.var_[i]=100
-                self.scale_[i]=10
-
-        return self
-
-
-class MultiSWeightsScaler():
-    """ Class that scales makes the integral of the signal weights be 1., for several signal categories the distribution as a function of the class variable is flattened. Background is not considered."""
-
-    def _reset(self):
-        """Reset internal data-dependent state of the scaler, if necessary.
-        __init__ parameters are not touched.
-        """
-
-        # Checking one attribute is enough, becase they are all set together
-        # in partial_fit
-        if hasattr(self, 'scale_'):
-            del self.scale_
-
-    def fit(self,X,y, sample_weight):
-        """learns the sum of weights for all classes and calculates a scale factor for each class so that the sum of weights for the signal is flattened as a function of the class variable (and the integral is 1.0)
-           X: feature matrix, ignored
-           y: series of class labels
-           sample_weight: Series of sample weights
-        """
-        classes=sorted(y.unique())
-        differences={}
-        #set the differences between signal points
-        differences={classes[i]:(classes[i+1]-classes[i-1])/2 for i in range(1,len(classes)-1) if classes[i]>0}
-        differences[classes[0]]=classes[1]-classes[0]
-        differences[classes[-1]]=classes[-1]-classes[-2]
-        diffsum=sum(differences.values())
-        #print differences, "->", diffsum
-        self.scale_={}
-        for classlabel in classes:
-            sumweight=sample_weight[y==classlabel].sum()
-            self.scale_[classlabel]=differences[classlabel]/(sumweight*diffsum)
-        return
-        
-    def transform(self, X, y, sample_weight, copy=None):
-        """Transforms the sum of weights for all classes so that sum of weights for the signal is flattened as a function of the class variable (and the integral is 1.0)
-           X: feature matrix, ignored
-           y: series of class labels
-           sample_weight: Series of sample weights
-        """
-        
-        for classlabel in self.scale_:
-            sample_weight[y==classlabel]*=self.scale_[classlabel]
-        return X
-
-class MultiSBWeightsScaler():
-    """ Class that scales makes the integral of the signal/background weights be 0.5, for several signal categories the distribution as a function of the class variable is flattened"""
-
-    def __init__(self, backgroundclass=0):
-        """ constructor
-            backgroundclass: label for background
-        """
-        self.backgroundclass=backgroundclass
-    
-    def _reset(self):
-        """Reset internal data-dependent state of the scaler, if necessary.
-        __init__ parameters are not touched.
-        """
-
-        # Checking one attribute is enough, becase they are all set together
-        # in partial_fit
-        if hasattr(self, 'scale_'):
-            del self.scale_
-
-    def fit(self,X,y, sample_weight):
-        """learns the sum of weights for all classes and calculates a scale factor for each class so that sum of weight for background is 0.5 and the sum of weights for the signal is flattened as a function of the class variable (and the integral is 0.5)
-           X: feature matrix, ignored
-           y: series of class labels
-           sample_weight: Series of sample weights
-        """
-        classes=sorted(y.unique())
-        classes.remove(self.backgroundclass)
-        differences={}
-        if len(classes)>1: #more than 1 signal
-            #set the differences between signal points
-            differences={classes[i]:(classes[i+1]-classes[i-1])/2 for i in range(1,len(classes)-1) if classes[i]>0}
-            differences[classes[0]]=classes[1]-classes[0]
-            differences[classes[-1]]=classes[-1]-classes[-2]
-            diffsum=sum(differences.values())
-            #print differences, "->", diffsum
-        else:
-            differences[classes[0]]=1
-            diffsum=1
-        self.scale_={}
-        for classlabel in classes:
-            sumweight=sample_weight[y==classlabel].sum()
-            self.scale_[classlabel]=differences[classlabel]/(2*sumweight*diffsum)
-        sumweight=sample_weight[y==self.backgroundclass].sum()
-        self.scale_[self.backgroundclass]=0.5/sumweight
-        return
-        
-    def transform(self, X, y, sample_weight, copy=None):
-        """Transforms the sum of weights for all classes so that sum of weight for background is 0.5 and the sum of weights for the signal is flattened as a function of the class variable (and the integral is 0.5)
-           X: feature matrix, ignored
-           y: series of class labels
-           sample_weight: Series of sample weights
-        """
-        
-        for classlabel in self.scale_:
-            sample_weight[y==classlabel]*=self.scale_[classlabel]
-        return X
-        
-        
+        return X, y, sample_weight
