@@ -301,7 +301,7 @@ class FeatureDivider():
 
         return self
          
-    def transform(self, X, y='deprecated', sample_weight=None):
+    def transform(self, X, y, sample_weight=None):
         """Perform standardization by centering and scaling
         Parameters
         ----------

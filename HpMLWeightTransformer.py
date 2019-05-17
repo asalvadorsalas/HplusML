@@ -151,3 +151,33 @@ class CustomWeightsScaler():
         for classlabel in self.scale_:
             sample_weight[y==classlabel]*=self.scale_[classlabel]
         return X, y, sample_weight
+
+class WeightsMultiplier():
+    """ Class that scales the weights of signal and background events to match the fraction from a weights dictionary"""
+
+    def __init__(self, scales):
+        """ constructor
+            scales: dictionary of signal/background identifier and scale factor
+        """
+
+        self.scales=scales
+        
+    def fit(self,X,y, sample_weight):
+        """Does nothing, function exists for compatibility with pipelines only
+           X: feature matrix, ignored
+           y: series of class labels
+           sample_weight: Series of sample weights
+        """
+        
+        return
+        
+    def transform(self, X, y, sample_weight, copy=None):
+        """Transforms the sum of weights for all classes so that weights for each category are multiplied by scales[category]
+           X: feature matrix, ignored
+           y: series of class labels
+           sample_weight: Series of sample weights
+        """
+        
+        for classlabel in self.scales:
+            sample_weight[y==classlabel]*=self.scales[classlabel]
+        return X, y, sample_weight
