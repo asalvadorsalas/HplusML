@@ -315,6 +315,6 @@ class FeatureDivider():
             if column in self.excludecolumns or column==self.divisorcolumn:
                 continue
             
-            X[column+"div"+self.divisorcolumn]=X[column]/X[self.divisorcolumn]
+            X[column+"div"+self.divisorcolumn]=X[column]/X[self.divisorcolumn].astype(float)
 
         return X, y, sample_weight
