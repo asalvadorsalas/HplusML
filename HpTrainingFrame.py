@@ -3,6 +3,7 @@
 import numpy as np
 import HpMLUtils
 from sklearn.model_selection import train_test_split
+import pandas as pd
 
 class HpTrainingFrame:
     """Class that provides the H+ data for machine learning functions"""
@@ -22,10 +23,14 @@ class HpTrainingFrame:
            invertsignal: if true all signal points except for hpmass are selected
         """
 
-        regionseries=self.pandasframe.region==region
+        if region!=None:
+            regionseries=self.pandasframe.region==region
+        else:
+            regionseries=pd.Series([True]*self.pandasframe.shape[0], index=self.pandasframe.index)  
+        
         if hpmass=="multi":
             return regionseries
-
+        
         if invertsignal:
             issignalseries=self.pandasframe.process!="Hp"+str(hpmass)
         else:
@@ -86,7 +91,7 @@ class HpTrainingFrame:
             regression: bool, if false y will be 0=background or 1=signal, if true it will be the hp mass or 0 for background
             absoluteWeight: bool, true by default, if true the absolute value of the weights will be returned, if false also negative values will be returned
         """
-
+        
         features, classes, weights=self.get_features_classes_weights(region,hpmass, addMass=addMass, invertsignal=invertsignal, regression=regression, absoluteWeight=absoluteWeight)
         if random:
             #mask=self.get_pandasframe_mask(region, hpmass, invertsignal=invertsignal)
