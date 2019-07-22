@@ -1,0 +1,140 @@
+{
+  "inputs": [
+    {
+      "name": "nJets" ,
+      "offset": -4.999999999999996 ,
+       "scale":225179981368524.75 
+    },
+    {
+      "name": "nBTags_70" ,
+      "offset": -3.082361373233152 ,
+       "scale":3.549203415469249 
+    },
+    {
+      "name": "pT_jet1" ,
+      "offset": -248707.8902696298 ,
+       "scale":4.30545297847503e-06 
+    },
+    {
+      "name": "Mbb_MindR_70" ,
+      "offset": -143086.56077128567 ,
+       "scale":7.88092324018206e-06 
+    },
+    {
+      "name": "pT_jet5" ,
+      "offset": -37853.0733236202 ,
+       "scale":6.235648527916261e-05 
+    },
+    {
+      "name": "H1_all" ,
+      "offset": -0.2571638362043267 ,
+       "scale":4.33837867098054 
+    },
+    {
+      "name": "dRbb_avg_70" ,
+      "offset": -2.341266168086587 ,
+       "scale":2.1032828380268267 
+    },
+    {
+      "name": "dRlepbb_MindR_70" ,
+      "offset": -2.263090175585237 ,
+       "scale":1.0856035155145547 
+    },
+    {
+      "name": "Muu_MindR_70" ,
+      "offset": -163026.97593158856 ,
+       "scale":4.929711545035182e-06 
+    },
+    {
+      "name": "HT_jets" ,
+      "offset": -580831.9381346322 ,
+       "scale":2.3471923071346925e-06 
+    },
+    {
+      "name": "Mbb_MaxPt_70" ,
+      "offset": -208105.08088451848 ,
+       "scale":5.076705865889738e-06 
+    },
+    {
+      "name": "Mbb_MaxM_70" ,
+      "offset": -372309.29238477105 ,
+       "scale":3.0100884165427128e-06 
+    },
+    {
+      "name": "Mjjj_MaxPt" ,
+      "offset": -333140.6979825463 ,
+       "scale":3.7255007547605227e-06 
+    },
+    {
+      "name": "Centrality_all" ,
+      "offset": -0.6089740710027373 ,
+       "scale":6.373910247781556 
+    },
+    {
+      "name": "hpmass" ,
+      "offset": -965.6387665198234 ,
+       "scale":0.0014804969231533435 
+    },
+    {
+      "name": "pT_jet1divhpmass" ,
+      "offset": -341.1118854024166 ,
+       "scale":0.0038226974157968686 
+    },
+    {
+      "name": "Mbb_MindR_70divhpmass" ,
+      "offset": -225.2485255275061 ,
+       "scale":0.004917104310604013 
+    },
+    {
+      "name": "pT_jet5divhpmass" ,
+      "offset": -69.9014265412319 ,
+       "scale":0.017404030226448045 
+    },
+    {
+      "name": "H1_alldivhpmass" ,
+      "offset": -0.0005381142220298866 ,
+       "scale":1328.7801091322146 
+    },
+    {
+      "name": "dRbb_avg_70divhpmass" ,
+      "offset": -0.004511477103764942 ,
+       "scale":273.1972047638283 
+    },
+    {
+      "name": "dRlepbb_MindR_70divhpmass" ,
+      "offset": -0.004470703460972812 ,
+       "scale":240.4149545322306 
+    },
+    {
+      "name": "Muu_MindR_70divhpmass" ,
+      "offset": -260.80179526491327 ,
+       "scale":0.002940847238978021 
+    },
+    {
+      "name": "HT_jetsdivhpmass" ,
+      "offset": -872.3141678841196 ,
+       "scale":0.001608150421530726 
+    },
+    {
+      "name": "Mbb_MaxPt_70divhpmass" ,
+      "offset": -316.3400155406812 ,
+       "scale":0.003185382750108247 
+    },
+    {
+      "name": "Mbb_MaxM_70divhpmass" ,
+      "offset": -550.854758618188 ,
+       "scale":0.0021246069448765735 
+    },
+    {
+      "name": "Mjjj_MaxPtdivhpmass" ,
+      "offset": -521.8336725233743 ,
+       "scale":0.002056700198663014 
+    },
+    {
+      "name": "Centrality_alldivhpmass" ,
+      "offset": -0.0011729421287536759 ,
+       "scale":1017.4122184011667 
+    }
+  ],
+  "class_labels": ["5j_train2mod1"]
+}
