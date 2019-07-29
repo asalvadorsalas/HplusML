@@ -4,11 +4,11 @@ For the time being, [jupyter.pic.es](https://jupyter.pic.es/) does not have a wo
 
 The kernel is the python instance used to run inside a notebook. If you run over scripts, you don't need ipykernel nor or the kernel installation (step 4).
 
-**PLEASE** note that you only need to create the environment and the kernel installation **ONCE**. The environment can be activated again (step 2) and the kernel will appear as an option in the notebook 
+**PLEASE** note that you only need to create the environment and the kernel installation **ONCE**. The environment can be activated again (step 2) and the kernel will appear as an option in the notebook.
 
 1. Create local conda environment
   
-    Conda is the friendly python environment that takes care of installing properly the compatible packages for you
+    Conda is the friendly python environment that takes care of installing properly the compatible packages for you.
     
     `conda create --prefix Hplus_tfgpu` (`--prefix` is to create it locally, if you use `--name` the environment be eliminated at the end of the session)
 
@@ -26,17 +26,17 @@ The kernel is the python instance used to run inside a notebook. If you run over
     
     `pip install ipykernel pandas tables joblib scikit-learn matplotlib`
 
-4. Install kernel with the created environment.ç
+4. Install kernel with the created environment
 
     This has to be done ONCE.
     
     `python -m ipykernel install --user --name=Hplus_tfgpu` (or any other name)
 
-5. Refresh the browser and make sure you see the new kernel option inside the jupyter nootebook or when creating a new one.
+5. Refresh the browser and make sure you see the new kernel option inside the jupyter nootebook or when creating a new one
 
 _if there is anything wrong with this setup tell me_
   
-* Tutorial files are in scratch as they were too big to store in git. Copy the one locally (or more than one)
+* Tutorial files are in scratch as they were too big to store in git. Copy the one locally (or more than one).
 ```
 /nfs/at3/scratch/salvador/HplusML/tutorial/modelNN_b1024
 /nfs/at3/scratch/salvador/HplusML/tutorial/modelNN_b128
