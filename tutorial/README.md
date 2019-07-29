@@ -1,4 +1,4 @@
-Tutorial
+Tutorial Setup
 ======
 For the time being, [jupyter.pic.es](https://jupyter.pic.es/) does not have a working setup by *default*. Here are some steps to setup a local environment and install a kernel.
 
@@ -36,7 +36,16 @@ The kernel is the python instance used to run inside a notebook. If you run over
 
 _if there is anything wrong with this setup tell me_
   
-* Tutorial files are in scratch as they were too big to store in git. Copy the one locally (or more than one).
+Download the branch
+======
+
+Go to your desired workspace and,
+
+`git clone -b allevaluation --single-branch https://github.com/asalvadorsalas/HplusML.git`
+
+and open the Tutorial_MP_NN.ipynb. Feel free to execute all the cells one by one (you'll probably need to change the line where I move the data to the tmp disk)
+
+The evaluation example uses one of these models that are in scratch (they were too big to store in git). Copy the modelNN_b128 locally (or more than one).
 ```
 /nfs/at3/scratch/salvador/HplusML/tutorial/modelNN_b1024
 /nfs/at3/scratch/salvador/HplusML/tutorial/modelNN_b128
