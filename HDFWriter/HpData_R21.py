@@ -7,6 +7,7 @@ import json
 import os.path
 import re
 import numpy
+import sys
 
 #df.apply(setRegionR21,args=(self.btagWP,), axis=1)
 def getR21TTHWeight(event):
@@ -38,6 +39,19 @@ class HpAnalysis:
         
         self.feature_names=["nJets","nBTags_70","jet_pt","Mbb_MindR_70","pT_jet5","H1_all","dRbb_avg_70","dRlepbb_MindR_70","Muu_MindR_70","HT_jets","Mbb_MaxPt_70","Mbb_MaxM_70","Mjjj_MaxPt","Centrality_all"]
 
+        for item in [225,250,275,300,350,400,500,600,700,800,900,1000,1200,1400,1600,1800,2000]:
+            self.feature_names.append("HpNN_"+str(item))
+            if item in [350,400,500,600,700,800,900,1000,1200,1400,1600,1800,2000]:
+                self.feature_names.append("HpBDT_Semilep_v1_INC_BDT"+str(item))
+            elif item in [225,250,275,300]:
+                self.feature_names.append("HpBDT_Semilep_v2_HF_BDT"+str(item))
+            else:
+                print ("ERROR in BDT variable loading")
+                sys.exit()
+        for item in [225,250,275,300,600,1200,1800]:
+            self.feature_names.append("HpDiscriminant_"+str(item))
+
+        self.feature_names.append("randomRunNumber")
         self.getGeneralSettings()
         self.df_mc=None
         self.df_data=None
@@ -166,3 +180,5 @@ class HpAnalysis:
             self.df_mc.loc[:, 'pT_jet1'] = self.df_mc.jet_pt.map(lambda x: x[0])
             self.df_mc.reset_index(inplace = True) 
             self.df_mc["hpmass"]=self.df_mc.apply(lambda x: int(x['process'].replace("Hp","")) if "Hp" in x['process'] else -1,axis=1)
+            self.df_mc.loc[:, 'year'] = self.df_mc.randomRunNumber.map(lambda x: "mc16a" if x<=311481 else "mc16d" if x <=340453 else "mc16e") 
+            self.df_mc.drop("randomRunNumber",axis=1)

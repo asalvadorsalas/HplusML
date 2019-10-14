@@ -1,0 +1,212 @@
+{
+    "Region": [
+        {
+            "Selection": "nBTags_70==3", 
+            "Name": "INC_5j3b", 
+            "NtuplePathSuff": "5je"
+        }, 
+        {
+            "Selection": "nBTags_70>=4", 
+            "Name": "INC_5jge4b", 
+            "NtuplePathSuff": "5je"
+        }, 
+        {
+            "Selection": "nBTags_70==3", 
+            "Name": "INC_ge6j3b", 
+            "NtuplePathSuff": "6ji"
+        }, 
+        {
+            "Selection": "nBTags_70>=4", 
+            "Name": "INC_ge6jge4b", 
+            "NtuplePathSuff": "6ji"
+        }
+    ], 
+    "Sample": [
+        {
+            "NtupleFile": "data", 
+            "Type": "DATA", 
+            "Name": "data"
+        }, 
+        {
+            "Selection": "HF_SimpleClassification == 0", 
+            "NtupleFiles": ["tt_PP8_mc16a_AFII","tt_PP8_mc16d_AFII","tt_PP8_mc16e_AFII","tt_PP8filtered_mc16a_AFII","tt_PP8filtered_mc16d_AFII","tt_PP8filtered_mc16e_AFII"],
+            "Name": "ttlight", 
+            "MCweight": "(((mcChannelNumber==410470) && (TopHeavyFlavorFilterFlag==0)) || ((mcChannelNumber==411073 || mcChannelNumber==411076) && (TopHeavyFlavorFilterFlag==1)) || ((mcChannelNumber==411074 || mcChannelNumber==411077) && (TopHeavyFlavorFilterFlag==2)) || ((mcChannelNumber==411075 || mcChannelNumber==411078) && (TopHeavyFlavorFilterFlag==3)))",
+            "Group": "t#bar{t} + light", 
+            "Type": "BACKGROUND"
+        }, 
+        {
+            "Selection": "HF_SimpleClassification == -1", 
+            "NtupleFiles": ["tt_PP8_mc16a_AFII","tt_PP8_mc16d_AFII","tt_PP8_mc16e_AFII","tt_PP8filtered_mc16a_AFII","tt_PP8filtered_mc16d_AFII","tt_PP8filtered_mc16e_AFII"],
+            "Name": "ttc", 
+            "MCweight": "(((mcChannelNumber==410470) && (TopHeavyFlavorFilterFlag==0)) || ((mcChannelNumber==411073 || mcChannelNumber==411076) && (TopHeavyFlavorFilterFlag==1)) || ((mcChannelNumber==411074 || mcChannelNumber==411077) && (TopHeavyFlavorFilterFlag==2)) || ((mcChannelNumber==411075 || mcChannelNumber==411078) && (TopHeavyFlavorFilterFlag==3)))",
+            "Group": "t#bar{t} + #geq1c", 
+            "Type": "BACKGROUND"
+        }, 
+        {
+            "Selection": "HF_SimpleClassification == 1", 
+            "NtupleFiles": ["tt_PP8_mc16a_AFII","tt_PP8_mc16d_AFII","tt_PP8_mc16e_AFII","tt_PP8filtered_mc16a_AFII","tt_PP8filtered_mc16d_AFII","tt_PP8filtered_mc16e_AFII"],
+            "Name": "ttb", 
+            "MCweight": "(((mcChannelNumber==410470) && (TopHeavyFlavorFilterFlag==0)) || ((mcChannelNumber==411073 || mcChannelNumber==411076) && (TopHeavyFlavorFilterFlag==1)) || ((mcChannelNumber==411074 || mcChannelNumber==411077) && (TopHeavyFlavorFilterFlag==2)) || ((mcChannelNumber==411075 || mcChannelNumber==411078) && (TopHeavyFlavorFilterFlag==3)))",
+            "Group": "t#bar{t} + #geq1b", 
+            "Type": "BACKGROUND"
+        }, 
+        {
+            "NtupleFiles": ["ttW_mc16a","ttW_mc16d","ttW_mc16e"],
+            "Name": "ttW", 
+            "Group": "t#bar{t} + V",
+            "Type": "BACKGROUND"
+        },
+        {
+            "NtupleFiles": ["ttZ_ttll_mc16a","ttZ_ttll_mc16d","ttZ_ttll_mc16e"],
+            "Name": "ttZ", 
+            "Group": "t#bar{t} + V",
+            "Type": "BACKGROUND"
+        }, 
+        {
+            "NtupleFiles": ["Wt_mc16a","Wt_mc16d","Wt_mc16e"],
+            "Name": "st_wchan", 
+            "Group": "Non-t#bar{t}",
+            "Type": "BACKGROUND"
+        }, 
+        {
+            "NtupleFiles": ["st_tc_mc16a","st_tc_mc16d","st_tc_mc16e"],
+            "Name": "st_tchan", 
+            "Group": "Non-t#bar{t}",
+            "Type": "BACKGROUND"
+        }, 
+        {
+            "NtupleFiles": ["st_sc_mc16a","st_sc_mc16d","st_sc_mc16e","tZ_mc16a","tZ_mc16d","tZ_mc16e","tttt_mc16a_AFII","tttt_mc16d_AFII","tttt_mc16e_AFII","tWZ_mc16a","tWZ_mc16d","tWZ_mc16e"],
+            "Name": "othertop", 
+            "Group": "Non-t#bar{t}",
+            "Type": "BACKGROUND"
+        },
+        {
+            "Selection": "(mcChannelNumber!=364171 || eventNumber!=8865182)*(mcChannelNumber!=364174 || eventNumber!=17265866)",
+            "NtupleFiles": ["db_mc16a","db_mc16d","db_mc16e","wjets_mc16a","wjets_mc16d","wjets_mc16e","zjets_mc16a","zjets_mc16d","zjets_mc16e"],
+            "Name": "bosonicBkg", 
+            "MCweight": "(1.+0.3*(((mcChannelNumber>=364100 && mcChannelNumber<=364141) || (mcChannelNumber>=364198 && mcChannelNumber<=364215))*(nHFJets>0)))",
+            "Group": "Non-t#bar{t}",
+            "Type": "BACKGROUND"
+        },
+        {
+            "NtupleFiles": ["ttH_PP8_mc16a","ttH_PP8_mc16d","ttH_PP8_mc16e"],
+            "Name": "ttH", 
+            "Group": "Non-t#bar{t}",
+            "Type": "BACKGROUND"
+        },
+        {
+            "NtupleFiles": ["tH_mc16a_AFII","tH_mc16d_AFII","tH_mc16e_AFII"],
+            "Name": "tH", 
+            "Group": "Non-t#bar{t}",
+            "Type": "BACKGROUND"
+        },
+        {
+            "NtupleFiles": ["hp225_mc16a_AFII","hp225_mc16d_AFII","hp225_mc16e_AFII"],
+            "Name": "Hp225", 
+            "LumiScale": 44234.24, 
+            "Type": "SIGNAL"
+        },
+        {
+            "NtupleFiles": ["hp250_mc16a_AFII","hp250_mc16d_AFII","hp250_mc16e_AFII"],
+            "Name": "Hp250", 
+            "LumiScale": 55554.54, 
+            "Type": "SIGNAL"
+        },      
+        {
+            "NtupleFiles": ["hp275_mc16a_AFII","hp275_mc16d_AFII","hp275_mc16e_AFII"],
+            "Name": "Hp275", 
+            "LumiScale": 68910.56, 
+            "Type": "SIGNAL"
+        },    
+        {
+            "NtupleFiles": ["hp300_mc16a_AFII","hp300_mc16d_AFII","hp300_mc16e_AFII"],
+            "Name": "Hp300", 
+            "LumiScale": 85866.54, 
+            "Type": "SIGNAL"
+        },  
+        {
+            "NtupleFiles": ["hp350_mc16a_AFII","hp350_mc16d_AFII","hp350_mc16e_AFII"],
+            "Name": "Hp350", 
+            "LumiScale": 128821.06, 
+            "Type": "SIGNAL"
+        },    
+        {
+            "NtupleFiles": ["hp400_mc16a_AFII","hp400_mc16d_AFII","hp400_mc16e_AFII"],
+            "Name": "Hp400", 
+            "LumiScale": 191083.10, 
+            "Type": "SIGNAL"
+        },  
+        {
+            "NtupleFiles": ["hp500_mc16a_AFII","hp500_mc16d_AFII","hp500_mc16e_AFII"],
+            "Name": "Hp500", 
+            "LumiScale": 392131.45, 
+            "Type": "SIGNAL"
+        },  
+        {
+            "NtupleFiles": ["hp600_mc16a_AFII","hp600_mc16d_AFII","hp600_mc16e_AFII"],
+            "Name": "Hp600", 
+            "LumiScale": 762504.79, 
+            "Type": "SIGNAL"
+        },  
+        {
+            "NtupleFiles": ["hp700_mc16a_AFII","hp700_mc16d_AFII","hp700_mc16e_AFII"],
+            "Name": "Hp700", 
+            "LumiScale": 1409208.81, 
+            "Type": "SIGNAL"
+        },  
+        {
+            "NtupleFiles": ["hp800_mc16a_AFII","hp800_mc16d_AFII","hp800_mc16e_AFII"],
+            "Name": "Hp800", 
+            "LumiScale": 2493024.93, 
+            "Type": "SIGNAL"
+        },  
+        {
+            "NtupleFiles": ["hp900_mc16a_AFII","hp900_mc16d_AFII","hp900_mc16e_AFII"],
+            "Name": "Hp900", 
+            "LumiScale": 4288985.40, 
+            "Type": "SIGNAL"
+        },  
+        {
+            "NtupleFiles": ["hp1000_mc16a","hp1000_mc16d","hp1000_mc16e"],
+            "Name": "Hp1000", 
+            "LumiScale": 7100325.00, 
+            "Type": "SIGNAL"
+        },  
+        {
+            "NtupleFiles": ["hp1200_mc16a_AFII","hp1200_mc16d_AFII","hp1200_mc16e_AFII"],
+            "Name": "Hp1200", 
+            "LumiScale": 18376306.20, 
+            "Type": "SIGNAL"
+        },  
+        {
+            "NtupleFiles": ["hp1400_mc16a_AFII","hp1400_mc16d_AFII","hp1400_mc16e_AFII"],
+            "Name": "Hp1400", 
+            "LumiScale": 44014784.92, 
+            "Type": "SIGNAL"
+        },
+        {
+            "NtupleFiles": ["hp1600_mc16a_AFII","hp1600_mc16d_AFII","hp1600_mc16e_AFII"],
+            "Name": "Hp1600", 
+            "LumiScale": 100433406.74, 
+            "Type": "SIGNAL"
+        },
+        {
+            "NtupleFiles": ["hp1800_mc16a_AFII","hp1800_mc16d_AFII","hp1800_mc16e_AFII"],
+            "Name": "Hp1800", 
+            "LumiScale": 217992333.13, 
+            "Type": "SIGNAL"
+        },
+        {
+            "NtupleFiles": ["hp2000_mc16a_AFII","hp2000_mc16d_AFII","hp2000_mc16e_AFII"],
+            "Name": "Hp2000", 
+            "LumiScale": 457263904.50, 
+            "Type": "SIGNAL"
+        }
+    ], 
+    "Job": {
+        "NtuplePaths": "/nfs/at3/scratch/salvador/HplusR21/L2RunR21-2-86/Output_00/", 
+        "NtupleName": "nominal_Loose", 
+        "MCweight": "weight_normalise*weight_pileup*weight_mc*weight_leptonSF*weight_bTagSF_MV2c10_70*weight_jvt*(randomRunNumber<=311481 ? 36207.66 : (randomRunNumber<=340453 ? 44307.4 : 58450.1))*(ejets_2015_MV2c10==1 || ejets_2016_MV2c10==1 || ejets_2017_MV2c10==1 || ejets_2018_MV2c10==1 || mujets_2015_MV2c10==1 || mujets_2016_MV2c10==1 || mujets_2017_MV2c10==1 || mujets_2018_MV2c10==1)"
+    }
+}
