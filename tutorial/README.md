@@ -24,7 +24,7 @@ The kernel is the python instance used to run inside a notebook. If you run over
     
     `conda install tensorflow-gpu` (requires confirmation)
     
-    `pip install ipykernel pandas tables joblib scikit-learn matplotlib`
+    `pip install ipykernel pandas tables joblib scikit-learn matplotlib feather-format`
 
 4. Install kernel with the created environment
 
